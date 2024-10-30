@@ -13,3 +13,11 @@
 ### 업무 일지 폴더
 - [업무 일지 전체 보기](logs/)
 
+
+## 팀원 소개
+
+| 서준호 | 우지호 | 우혜진 | 이수정 | 한영욱 |
+|--------|--------|--------|--------|
+| ![서준호 프로필](https://github.com/DDunos.png) | ![우지호 프로필](https://github.com/WooJHo.png) | ![우혜진 프로필](https://github.com/hyejin8890.png) | ![이수정 프로필](https://github.com/dltnwjd308.png) | ![한영욱 프로필](https://github.com/10wook.png) |
+| [@서준호](https://github.com/DDunos) | [@우지호](https://github.com/WooJHo) | [@우혜진](https://github.com/hyejin8890) | [@이수정](https://github.com/dltnwjd308) | [@한영욱](https://github.com/10wook) |
+
