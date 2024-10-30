@@ -7,8 +7,9 @@
 ## 프로젝트 현황
 
 ### 프로젝트 진척도
-![Progress](https://progress-bar.dev/3/?title=Progress&width=200)
+프로젝트 진척도: 3%
 
+[▓░░░░░░░░░░░░░░░░░░░░░]
 ### 업무 일지 폴더
 - [업무 일지 전체 보기](logs/)
 
