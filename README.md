@@ -15,9 +15,12 @@
 
 
 ## 팀원 소개
+<div align="center">
 
-| 서준호 | 우지호 | 우혜진 | 이수정 | 한영욱 |
-|--------|--------|--------|--------|
-| ![서준호 프로필](https://github.com/DDunos.png) | ![우지호 프로필](https://github.com/WooJHo.png) | ![우혜진 프로필](https://github.com/hyejin8890.png) | ![이수정 프로필](https://github.com/dltnwjd308.png) | ![한영욱 프로필](https://github.com/10wook.png) |
-| [@서준호](https://github.com/DDunos) | [@우지호](https://github.com/WooJHo) | [@우혜진](https://github.com/hyejin8890) | [@이수정](https://github.com/dltnwjd308) | [@한영욱](https://github.com/10wook) |
+| **서준호** | **우지호** | **우혜진** | **이수정** | **한영욱** |
+| :--------: | :--------: | :--------: | :--------: | :--------: |
+| [<img src="https://github.com/DDunos.png" height=150 width=150> <br/> @서준호](https://github.com/DDunos) | [<img src="https://github.com/WooJHo.png" height=150 width=150> <br/> @우지호](https://github.com/WooJHo) | [<img src="https://github.com/hyejin8890.png" height=150 width=150> <br/> @우혜진](https://github.com/hyejin8890) | [<img src="https://github.com/dltnwjd308.png" height=150 width=150> <br/> @이수정](https://github.com/dltnwjd308) | [<img src="https://github.com/10wook.png" height=150 width=150> <br/> @한영욱](https://github.com/10wook) |
 
+</div>
+
+<br>
