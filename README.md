@@ -1,11 +1,14 @@
 # AnBoIms
+안녕하세요. 저희 안보임스 프로젝트의 대표 레포지토리에 오신걸 환영합니다.
 
-## 주소: 고려대학교 우당교양관
+## 저희 프로젝트의 구조는 다음과 같습니다.
+![Image](https://github.com/AnBoIms/AnBoIms/raw/main/flow_chart_imgs/base_flow_chart.jpg)
 
-# 내용 마음대로 바꾸지 마세요.
+## 프로젝트 현황
 
-# 1029 해야 할일
-1. 깃 마스터 하기
-2. 각자 역할 분배
-3. 자료 조사 코드 복붙하여 실행
-4. 깃 머지
+### 프로젝트 진척도
+![Progress](https://progress-bar.dev/3/?title=Progress&width=200)
+
+### 업무 일지 폴더
+- [업무 일지 전체 보기](logs/)
+
