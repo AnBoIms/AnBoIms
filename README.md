@@ -1,6 +1,14 @@
 # AnBoIms
 안녕하세요. 저희 안보임스 프로젝트의 대표 레포지토리에 오신걸 환영합니다.
 
+## 프로젝트 소개
+안전 
+
+보호
+
+이미지
+
+
 ## 저희 프로젝트의 구조는 다음과 같습니다.
 ![Image](https://github.com/AnBoIms/AnBoIms/raw/main/flow_chart_imgs/base_flow_chart.jpg)
 
