@@ -9,8 +9,6 @@
 
 
 ## 사용방법
-1. 
-'''
-pip install easyocr
-'''
+1. pip install easyocr
+
 2. EasyOCR_test.py 실행
