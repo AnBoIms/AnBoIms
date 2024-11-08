@@ -1,8 +1,16 @@
 import numpy as np
 import cv2 
 import matplotlib.pyplot as plt
+import os
 
-img = cv2.imread('/home/hyejin/test_ocr/test_image/test1.jpg',0)
+## 파일 경로를 상대경로를 활용해서 더 쉽게 접근이 가능하게 수정하였습니다. - 한영욱
+# 현재 파일이 실행되는 디렉토리 경로를 가져오기
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# 이미지 파일 경로 설정 (현재 디렉토리 기준)
+image_path = os.path.join(current_dir, 'test1.png')
+
+img = cv2.imread(image_path,0)
 
 ret, thresh1 = cv2.threshold(img,127,255, cv2.THRESH_BINARY)
 ret, thresh2 = cv2.threshold(img,127,255, cv2.THRESH_BINARY_INV)

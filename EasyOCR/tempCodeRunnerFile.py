@@ -1,0 +1,1 @@
+edited_img[mask] = [0, 0, 255]
