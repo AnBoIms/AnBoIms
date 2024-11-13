@@ -1,6 +1,6 @@
 # 프로젝트 업무 일지
 
-## 날짜: 2024년 11월 08일
+## 날짜: 2024년 22월 22일
 
 ---
 
@@ -62,8 +62,8 @@
   </tr>
   <tr>
     <td rowspan="2">금일</td>
-    <td>fasttext 모델 실행</td>
-    <td>완료</td>
+    <td>-</td>
+    <td>-</td>
   </tr>
   <tr>
     <td>-</td>
@@ -96,17 +96,17 @@
   </tr>
   <tr>
     <td rowspan="2">금일</td>
-    <td>Run Upscaling Model</td>
-    <td>Complete</td>
+    <td>-</td>
+    <td>-</td>
   </tr>
   <tr>
-    <td>Labeling IdCard - 500img</td>
-    <td>Complete</td>
+    <td>-</td>
+    <td>-</td>
   </tr>
   <tr>
     <td rowspan="2">명일</td>
-    <td>Improve Upscaling Model Performance</td>
-    <td>In Progress</td>
+    <td>-</td>
+    <td>-</td>
   </tr>
   <tr>
     <td>-</td>
@@ -130,12 +130,12 @@
   </tr>
   <tr>
     <td rowspan="2">금일</td>
-    <td>mmedetection 파인튜닝</td>
-    <td>진행중</td>
+    <td>-</td>
+    <td>-</td>
   </tr>
   <tr>
-    <td>라벨링 데이터 수집</td>
-    <td>진행중</td>
+    <td>-</td>
+    <td>-</td>
   </tr>
   <tr>
     <td rowspan="2">명일</td>
@@ -164,12 +164,12 @@
   </tr>
   <tr>
     <td rowspan="3">금일</td>
-    <td>라벨링 데이터 수집</td>
-    <td>완료</td>
+    <td>-</td>
+    <td>-</td>
   </tr>
   <tr>
-    <td>EasyOcr 전처리</td>
-    <td>진행중</td>
+    <td>-</td>
+    <td>-</td>
   </tr>
   <tr>
     <td>-</td>
@@ -177,11 +177,11 @@
   </tr>
   <tr>
     <td rowspan="2">명일</td>
-    <td>해상도 떨어뜨려가면서 EasyOcr 성능 확인</td>
+    <td>-</td>
     <td></td>
   </tr>
   <tr>
-    <td>글씨만 바운딩 박스 가능한지 찾아보기</td>
+    <td>-</td>
     <td>-</td>
   </tr>
 </table>
@@ -202,8 +202,8 @@
   </tr>
   <tr>
     <td rowspan="2">금일</td>
-    <td>ROBERTA 돌려보기</td>
-    <td>결과 출력 완료</td>
+    <td>-</td>
+    <td>-</td>
   </tr>
   <tr>
     <td>-</td>
@@ -211,7 +211,7 @@
   </tr>
   <tr>
     <td rowspan="2">명일</td>
-    <td>다른 파트 붙어서 도와주기</td>
+    <td>-</td>
     <td>-</td>
   </tr>
   <tr>
@@ -236,8 +236,8 @@
   </tr>
   <tr>
     <td rowspan="3">금일</td>
-    <td>GAN git clone 및 실행</td>
-    <td>in progress</td>
+    <td>-</td>
+    <td>-</td>
   </tr>
   <tr>
     <td>-</td>
@@ -249,11 +249,11 @@
   </tr>
   <tr>
     <td rowspan="2">명일</td>
-    <td>GAN git execute</td>
+    <td>-</td>
     <td>-</td>
   </tr>
   <tr>
-    <td>ppt 제작 및 발표준비</td>
+    <td>-</td>
     <td>-</td>
   </tr>
 </table>
@@ -267,20 +267,17 @@
 - **회의 시간**: 03:00 PM ~ 05:00 PM
 - **참여자**: 김규리 ,서준호, 우지호, 우혜진, 이수정, 한영욱
 - **주요 논의 사항**:
-  - 신분증 객체 탐지 및 가명화에 집중하여 먼저 끝낼 것을 결정
-  - 이에 따른 김규리,이수정 팀원의 새로운 역할 배치에 대한 논의
-
-
+  - 회의 내용 히히
+  - 회의 내용 히히 
 ---
 
 ### 다음 회의 일정
 
-- **날짜**: 2024년 11월 11일
-- **시간**: 09:00 AM
+- **날짜**: 2024년 11월 05일
+- **시간**: 10:00 AM
 - **목표**:
-  - 피피티 구성 및 발표준비
-  - 김규리 이수정 팀원의 새로운 역할 분배 논의
- 
+  - 회의 내용 히히
+  - 회의 내용 히히 
 
 
 ### 금일 업무 현황
