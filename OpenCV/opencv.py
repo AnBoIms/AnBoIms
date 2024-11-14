@@ -142,7 +142,7 @@ def inpaint_image(image_path, method='box', mask_path=None):
     else:
         return
 
-    inpainted_image = cv2.inpaint(image, mask, inpaintRadius=3, flags=cv2.INPAINT_NS)
+    inpainted_image = cv2.inpaint(image, mask, inpaintRadius=3, flags=cv2.INPAINT_TELEA)
 
     base_name = os.path.splitext(os.path.basename(image_path))[0]
     output_folder = f"output/{method}"
@@ -162,4 +162,4 @@ mask_path = 'input/original_mask.jpg'
 inpaint_image(image_path, method='file', mask_path=mask_path)
 # inpaint_image(image_path, method='box')
 # inpaint_image(image_path, method='auto')
-# inpaint_image(image_path, method='poligon')
+# inpaint_image(image_path, method='polygon')
