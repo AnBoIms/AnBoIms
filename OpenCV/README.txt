@@ -1,3 +1,4 @@
+# opencv.py
 input directory에 image 넣고 opencv.py 수정해서 돌리시면 됩니다
 
 1. box (사용자 지정)
@@ -14,3 +15,8 @@ input directory에 image 넣고 opencv.py 수정해서 돌리시면 됩니다
 2. flags: 
 * cv2.INPAINT_NS (Navier-Stokes 방식) : 더 부드럽게 작업
 * cv2.INPAINT_TELEA INPAINT_NS : 상대적으로 더 뚜렷한 결과
+
+===========================================================
+
+#synthesis.py
+input image path랑 outputname 수정해서 run
