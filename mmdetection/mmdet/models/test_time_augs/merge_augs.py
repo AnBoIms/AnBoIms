@@ -175,7 +175,6 @@ def merge_aug_scores(aug_scores):
     else:
         return np.mean(aug_scores, axis=0)
 
-
 def merge_aug_masks(aug_masks: List[Tensor],
                     img_metas: dict,
                     weights: Optional[Union[list, Tensor]] = None) -> Tensor:
@@ -193,14 +192,26 @@ def merge_aug_masks(aug_masks: List[Tensor],
     """
     recovered_masks = []
     for i, mask in enumerate(aug_masks):
+        print(f"Augmented mask {i} shape: {mask.shape}")  # 디버깅: 마스크 형상 출력
+
+        if mask.ndim < 4:
+            print(f"Mask {i} has ndim {mask.ndim}, reshaping...")
+            mask = mask.unsqueeze(0)  # 차원 추가
+
         if weights is not None:
             assert len(weights) == len(aug_masks)
             weight = weights[i]
         else:
             weight = 1
+
         flip = img_metas.get('flip', False)
         if flip:
-            flip_direction = img_metas['flip_direction']
+            flip_direction = img_metas.get('flip_direction', None)
+            if flip_direction not in ['horizontal', 'vertical', 'diagonal', None]:
+                raise ValueError(
+                    f"Invalid flipping direction '{flip_direction}'. Expected 'horizontal', 'vertical', 'diagonal', or None."
+                )
+
             if flip_direction == 'horizontal':
                 mask = mask[:, :, :, ::-1]
             elif flip_direction == 'vertical':
@@ -208,12 +219,52 @@ def merge_aug_masks(aug_masks: List[Tensor],
             elif flip_direction == 'diagonal':
                 mask = mask[:, :, :, ::-1]
                 mask = mask[:, :, ::-1, :]
-            else:
-                raise ValueError(
-                    f"Invalid flipping direction '{flip_direction}'")
+
         recovered_masks.append(mask[None, :] * weight)
 
     merged_masks = torch.cat(recovered_masks, 0).mean(dim=0)
     if weights is not None:
         merged_masks = merged_masks * len(weights) / sum(weights)
     return merged_masks
+
+# def merge_aug_masks(aug_masks: List[Tensor],
+#                     img_metas: dict,
+#                     weights: Optional[Union[list, Tensor]] = None) -> Tensor:
+#     """Merge augmented mask prediction.
+
+#     Args:
+#         aug_masks (list[Tensor]): each has shape
+#             (n, c, h, w).
+#         img_metas (dict): Image information.
+#         weights (list or Tensor): Weight of each aug_masks,
+#             the length should be n.
+
+#     Returns:
+#         Tensor: has shape (n, c, h, w)
+#     """
+#     recovered_masks = []
+#     for i, mask in enumerate(aug_masks):
+#         if weights is not None:
+#             assert len(weights) == len(aug_masks)
+#             weight = weights[i]
+#         else:
+#             weight = 1
+#         flip = img_metas.get('flip', False)
+#         if flip:
+#             flip_direction = img_metas['flip_direction']
+#             if flip_direction == 'horizontal':
+#                 mask = mask[:, :, :, ::-1]
+#             elif flip_direction == 'vertical':
+#                 mask = mask[:, :, ::-1, :]
+#             elif flip_direction == 'diagonal':
+#                 mask = mask[:, :, :, ::-1]
+#                 mask = mask[:, :, ::-1, :]
+#             else:
+#                 raise ValueError(
+#                     f"Invalid flipping direction '{flip_direction}'")
+#         recovered_masks.append(mask[None, :] * weight)
+
+#     merged_masks = torch.cat(recovered_masks, 0).mean(dim=0)
+#     if weights is not None:
+#         merged_masks = merged_masks * len(weights) / sum(weights)
+#     return merged_masks
