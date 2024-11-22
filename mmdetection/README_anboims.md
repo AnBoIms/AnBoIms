@@ -25,10 +25,14 @@ python output_send.py
 2) 데이터셋 경로를 mmdetection 폴더 내에 적절한 위치에 저장.
 - 정확한 경로 설정은 mmdetection에서 Train with customized datasets페이지에서 확인.
 3) training 코드 예시
+```
 python tools\train.py configs\anboims_dataset\mask-rcnn_r50-caffe_fpn_ms-poly-1x_anboimsdataset.py
-
+```
 #### 학습된 모델 테스트하는 코드예시
+```
 python tools\test.py configs\anboims_dataset\mask-rcnn_r50-caffe_fpn_ms-poly-1x_anboimsdataset.py work_dirs\mask-rcnn_r50-caffe_fpn_ms-poly-1x_anboimsdataset\epoch_12.pth
-
+```
 #### 사진 출력물 테스트 코드예시
+```
 test_maskrcnn.py 
+```
