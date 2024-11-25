@@ -16,8 +16,9 @@ openmim: 0.3.9
 python: 3.8.20
 
 ### 2. mmdetection폴더 경로에서 다음과 같이 코드실행
+```
 python output_send.py
-
+```
 #### 모델 학습시키는 방법
 1) 데이터셋 구축
 - roboflow플랫폼 추천
@@ -34,5 +35,5 @@ python tools\test.py configs\anboims_dataset\mask-rcnn_r50-caffe_fpn_ms-poly-1x_
 ```
 #### 사진 출력물 테스트 코드예시
 ```
-test_maskrcnn.py 
+python test_maskrcnn.py 
 ```
