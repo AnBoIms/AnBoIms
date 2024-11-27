@@ -7,7 +7,7 @@ model = dict(
         bbox_head=dict(num_classes=1), mask_head=dict(num_classes=1)))
 
 # Modify dataset related settings
-data_root = "C:\\Users\\Woojiho\\Desktop\\mmdetection\\tools\\data\\anboims_dataset\\"
+data_root = "C:\\Users\\Woojiho\\Desktop\\mmdetection\\tools\\data\\anboims_dataset_1000\\"
 metainfo = {
     'classes': ('IDCard', ),
     'palette': [
