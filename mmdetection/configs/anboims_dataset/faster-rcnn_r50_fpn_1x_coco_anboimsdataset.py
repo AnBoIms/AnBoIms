@@ -7,9 +7,9 @@ model = dict(
         bbox_head=dict(num_classes=1)))
 
 # Modify dataset related settings
-data_root = "C:\\Users\\Woojiho\\Desktop\\mmdetection\\tools\\data\\anboims_dataset\\"
+data_root = "C:\\Users\\Woojiho\\Desktop\\mmdetection\\tools\\data\\signboard_Test\\"
 metainfo = {
-    'classes': ('IDCard', ),
+    'classes': ('sign', ),
     'palette': [
         (220, 20, 60),
     ]
