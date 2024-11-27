@@ -1,5 +1,5 @@
 gpu = 0
-cpu = 'cpu'##cpu 설정 추가
+# cpu = 'cpu'##cpu 설정 추가
 
 
 lt = 1.
@@ -17,12 +17,12 @@ learning_rate = 1e-4
 decay_rate = 0.9
 beta1 = 0.9
 beta2 = 0.999 
-# max_iter = 500000
-max_iter = 1600
+max_iter = 500000
+# max_iter = 1600
 show_loss_interval = 50
 write_log_interval = 50
-# save_ckpt_interval = 1000
-save_ckpt_interval = 200
+save_ckpt_interval = 1000
+# save_ckpt_interval = 200
 gen_example_interval = 1000
 checkpoint_savedir = 'logs/'
 ckpt_path = '/content/trained_final_5M_.model'
