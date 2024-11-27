@@ -8,24 +8,49 @@ from skimage.morphology import skeletonize
 def textIpaintingDatasetsCreate(
   input_text_file,
   output_text_file,
-  font_file,
+  font_dir,
   standard_font_file,
-  color,
-  background_path,
+  color_file,
+  background_dir,
   orientation,
   output_path,
   num_samples,
   image_size,
   start_num
   ):
-  os.makedirs(output_path, exist_ok=True) # Make dir
-  matched_input, matched_output = matchText(input_text_file, output_text_file)
-  creat_i_s(matched_input, font_file, color, background_path, orientation, output_path, image_size, start_num)
-  creat_i_t(matched_output, standard_font_file, orientation, output_path, image_size, start_num)
-  creat_mask_t_t_sk(matched_output, font_file, orientation, output_path, image_size, start_num)
-  creat_t_t(matched_output, font_file, color, orientation, output_path, image_size, start_num)
-  creat_t_b(matched_output, font_file, background_path, orientation, output_path, image_size, start_num)
-  creat_t_f(matched_output, font_file, color, background_path, orientation, output_path, image_size, start_num)
+   # Make dir
+  os.makedirs(output_path, exist_ok=True)
+  i_s_path = os.path.join(output_path, 'i_s')
+  os.makedirs(i_s_path, exist_ok=True)
+  i_t_path = os.path.join(output_path, 'i_t')
+  os.makedirs(i_t_path, exist_ok=True)
+  mask_t_path = os.path.join(output_path, 'mask_t')
+  os.makedirs(mask_t_path, exist_ok=True)
+  t_sk_path = os.path.join(output_path, 't_sk')
+  os.makedirs(t_sk_path, exist_ok=True)
+  t_t_path = os.path.join(output_path, 't_t')
+  os.makedirs(t_t_path, exist_ok=True)
+  t_b_path = os.path.join(output_path, 't_b')
+  os.makedirs(t_b_path, exist_ok=True)
+  t_f_path = os.path.join(output_path, 't_f')
+  os.makedirs(t_f_path, exist_ok=True)
+  
+  fonts = [os.path.join(font_dir, f) for f in os.listdir(font_dir) if f.endswith(".ttf")]
+  backgrounds = [os.path.join(background_dir, f) for f in os.listdir(background_dir) if f.endswith(("jpeg", ".jpg", ".png"))]
+  with open(color_file, 'r', encoding='utf-8') as cf:
+    colors = [color_line.strip() for color_line in cf.readlines()]
+  n = start_num
+  for font in fonts:
+    for background in backgrounds:
+      for color in colors:
+        for matched_input, matched_output in matchText(input_text_file, output_text_file):
+          creat_i_s(matched_input, font, color, background, orientation, i_s_path, image_size, n)
+          creat_i_t(matched_output, standard_font_file, orientation, i_t_path, image_size, n)
+          creat_mask_t_t_sk(matched_output, font, orientation, mask_t_path, t_sk_path, image_size, n)
+          creat_t_t(matched_output, font, color, orientation, t_t_path, image_size, n)
+          creat_t_b(matched_output, font, background, orientation, t_b_path, image_size, n)
+          creat_t_f(matched_output, font, color, background, orientation, t_f_path, image_size, n)
+          n += 1
 
 
 def matchText(input_text_file, output_text_file):
@@ -35,99 +60,64 @@ def matchText(input_text_file, output_text_file):
     output_lines = [line.strip() for line in output_file.readlines()]
   # Matching lines
   matches = [(input_line, output_line) for input_line in input_lines for output_line in output_lines]
-  # Extraction
-  matched_input = [match[0] for match in matches]
-  matched_output = [match[1] for match in matches]
-  return matched_input, matched_output
+  return matches
 
 
-def creat_i_s(texts, font_file, color, background_path, orientation, output_path, image_size, start_num):
-  i_s_path = os.path.join(output_path, 'i_s')
-  os.makedirs(i_s_path, exist_ok=True)
-  i = start_num
-  for text in texts:
+def creat_i_s(text, font_file, color, background_path, orientation, i_s_path, image_size, n):
     # Load background and resize
     background = Image.open(background_path).convert('RGB')
     background = background.resize(image_size)
     i_s_image = drawText(text, font_file, color, background, orientation, image_size)
     # Save image
-    i_s_image.save(os.path.join(i_s_path, f"{i}_i_s.png"))
-    i += 1
+    i_s_image.save(os.path.join(i_s_path, f"{n}_i_s.png"))
 
 
-def creat_i_t(texts, standard_font_file, orientation, output_path, image_size, start_num):
-  i_t_path = os.path.join(output_path, 'i_t')
-  os.makedirs(i_t_path, exist_ok=True)
-  i = start_num
-  for text in texts:
+def creat_i_t(text, standard_font_file, orientation, i_t_path, image_size, n):
     # Create gray background
     background = Image.new('RGB', image_size, color='gray')
     i_t_image = drawText(text, standard_font_file, 'black', background, orientation, image_size)
     # Save image
-    i_t_image.save(os.path.join(i_t_path, f"{i}_i_t.png"))
-    i += 1
+    i_t_image.save(os.path.join(i_t_path, f"{n}_i_t.png"))
 
 
-def creat_mask_t_t_sk(texts, font_file, orientation, output_path, image_size, start_num):
-  mask_t_path = os.path.join(output_path, 'mask_t')
-  os.makedirs(mask_t_path, exist_ok=True)
-  t_sk_path = os.path.join(output_path, 't_sk')
-  os.makedirs(t_sk_path, exist_ok=True)
-  i = start_num
-  for text in texts:
+def creat_mask_t_t_sk(text, font_file, orientation, mask_t_path, t_sk_path, image_size, n):
     # Create black background
     background = Image.new('RGB', image_size, color='black')
     mask_t_image = drawText(text, font_file, 'white', background, orientation, image_size)
     # Save image
-    mask_t_image.save(os.path.join(mask_t_path, f"{i}_mask_t.png"))
+    mask_t_image.save(os.path.join(mask_t_path, f"{n}_mask_t.png"))
     # Convert cropped_image to grayscale
     grayscale_image = mask_t_image.convert('L')
     skeleton_image = skeletonize(np.array(grayscale_image))
     # Convert the skeleton image back to a PIL Image
     t_sk_image = Image.fromarray(skeleton_image.astype('uint8') * 255)
-    t_sk_image.save(os.path.join(t_sk_path, f"{i}_t_sk.png"))
-    i += 1
+    t_sk_image.save(os.path.join(t_sk_path, f"{n}_t_sk.png"))
 
 
-def creat_t_t(texts, font_file, color, orientation, output_path, image_size, start_num):
-  t_t_path = os.path.join(output_path, 't_t')
-  os.makedirs(t_t_path, exist_ok=True)
-  i = start_num
-  for text in texts:
+def creat_t_t(text, font_file, color, orientation, t_t_path, image_size, n):
     # Create gray background
     background = Image.new('RGB', image_size, color='gray')
     t_t_image = drawText(text, font_file, color, background, orientation, image_size)
     # Save image
-    t_t_image.save(os.path.join(t_t_path, f"{i}_t_t.png"))
-    i += 1
+    t_t_image.save(os.path.join(t_t_path, f"{n}_t_t.png"))
 
 
-def creat_t_b(texts, font_file, background_path, orientation, output_path, image_size, start_num):
-  t_b_path = os.path.join(output_path, 't_b')
-  os.makedirs(t_b_path, exist_ok=True)
-  i = start_num
-  for text in texts:
+def creat_t_b(text, font_file, background_path, orientation, t_b_path, image_size, n):
     # Load background and resize
     background = Image.open(background_path).convert('RGB')
     background = background.resize(image_size)
     t_b_image = drawText(text, font_file, 'black', background, orientation, image_size, True)
     # Save image
-    t_b_image.save(os.path.join(t_b_path, f"{i}_t_b.png"))
-    i += 1
+    t_b_image.save(os.path.join(t_b_path, f"{n}_t_b.png"))
 
 
-def creat_t_f(texts, font_file, color, background_path, orientation, output_path, image_size, start_num):
-  t_f_path = os.path.join(output_path, 't_f')
-  os.makedirs(t_f_path, exist_ok=True)
-  i = start_num
-  for text in texts:
+def creat_t_f(text, font_file, color, background_path, orientation, t_f_path, image_size, n):
     # Load background and resize
     background = Image.open(background_path).convert('RGB')
     background = background.resize(image_size)
     t_f_image = drawText(text, font_file, color, background, orientation, image_size)
     # Save image
-    t_f_image.save(os.path.join(t_f_path, f"{i}_t_f.png"))
-    i += 1
+    t_f_image.save(os.path.join(t_f_path, f"{n}_t_f.png"))
 
 
 def drawText(text, font_file, color, background, orientation, image_size, t_b=False):
