@@ -99,9 +99,9 @@ def clip_grad(model):
 
 def main():
     
-    #os.environ['CUDA_VISIBLE_DEVICES'] = str(cfg.gpu)
-    # os.environ['CUDA_VISIBLE_DEVICES'] = str(cfg.cpu)
-    device = torch.device(cfg.cpu)
+    os.environ['CUDA_VISIBLE_DEVICES'] = str(cfg.gpu)
+    os.environ['CUDA_VISIBLE_DEVICES'] = str(cfg.cpu)
+    # device = torch.device(cfg.cpu)
     train_name = get_train_name()
     
     print_log('Initializing SRNET', content_color = PrintColor['yellow'])
@@ -117,17 +117,17 @@ def main():
     
     print_log('training start.', content_color = PrintColor['yellow'])
         
-    # G = Generator(in_channels = 3).cuda()
-    G = Generator(in_channels = 3).to(device)
+    G = Generator(in_channels = 3).cuda()
+    # G = Generator(in_channels = 3).to(device)
     
-    # D1 = Discriminator(in_channels = 6).cuda()
-    D1 = Discriminator(in_channels = 6).to(device)
+    D1 = Discriminator(in_channels = 6).cuda()
+    # D1 = Discriminator(in_channels = 6).to(device)
     
-    # D2 = Discriminator(in_channels = 6).cuda()
-    D2 = Discriminator(in_channels = 6).to(device)
+    D2 = Discriminator(in_channels = 6).cuda()
+    # D2 = Discriminator(in_channels = 6).to(device)
     
-    # vgg_features = Vgg19().cuda()    
-    vgg_features = Vgg19().to(device) 
+    vgg_features = Vgg19().cuda()    
+    # vgg_features = Vgg19().to(device) 
         
     G_solver = torch.optim.Adam(G.parameters(), lr=cfg.learning_rate, betas = (cfg.beta1, cfg.beta2))
     D1_solver = torch.optim.Adam(D1.parameters(), lr=cfg.learning_rate, betas = (cfg.beta1, cfg.beta2))
@@ -209,21 +209,21 @@ def main():
           trainiter = iter(train_data)
           i_t, i_s, t_sk, t_t, t_b, t_f, mask_t = trainiter.next()
                 
-        # i_t = i_t.cuda()
-        # i_s = i_s.cuda()
-        # t_sk = t_sk.cuda()
-        # t_t = t_t.cuda()
-        # t_b = t_b.cuda()
-        # t_f = t_f.cuda()
-        # mask_t = mask_t.cuda()
+        i_t = i_t.cuda()
+        i_s = i_s.cuda()
+        t_sk = t_sk.cuda()
+        t_t = t_t.cuda()
+        t_b = t_b.cuda()
+        t_f = t_f.cuda()
+        mask_t = mask_t.cuda()
         
-        i_t = i_t.to(device) 
-        i_s = i_s.to(device) 
-        t_sk = t_sk.to(device) 
-        t_t = t_t.to(device) 
-        t_b = t_b.to(device) 
-        t_f = t_f.to(device) 
-        mask_t = mask_t.to(device) 
+        # i_t = i_t.to(device) 
+        # i_s = i_s.to(device) 
+        # t_sk = t_sk.to(device) 
+        # t_t = t_t.to(device) 
+        # t_b = t_b.to(device) 
+        # t_f = t_f.to(device) 
+        # mask_t = mask_t.to(device) 
         
         
         
@@ -347,11 +347,11 @@ def main():
                   example_iter = iter(example_loader)
                   inp = example_iter.next()
                 
-                # i_t = inp[0].cuda()
-                # i_s = inp[1].cuda()
+                i_t = inp[0].cuda()
+                i_s = inp[1].cuda()
                 
-                i_t = inp[0].to(device) 
-                i_s = inp[1].to(device) 
+                # i_t = inp[0].to(device) 
+                # i_s = inp[1].to(device) 
                 
                 name = str(inp[2][0])
                 
