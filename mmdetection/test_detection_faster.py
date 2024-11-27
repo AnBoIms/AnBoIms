@@ -13,82 +13,59 @@ checkpoint_file = 'work_dirs/faster-rcnn_r50_fpn_1x_coco_anboimsdataset/epoch_12
 model = init_detector(config_file, checkpoint_file, device='cpu')  # GPU 사용 시 'cuda:0', CPU 사용 시 'cpu'로 설정
 
 # 3. 테스트할 이미지 파일 경로 설정
-img = 'test_images/KakaoTalk_20241109_072449401_01.jpg'  # 테스트할 이미지 파일 경로
+img = 'test_images/KakaoTalk_20241126_140949348_02.jpg'  # 테스트할 이미지 파일 경로
 image = mmcv.imread(img)
 
 # 4. 이미지에서 객체 탐지
 result = inference_detector(model, img)
 
-# 5. 결과 필터링 및 NMS 적용
-score_thr = 0.3
-iou_threshold = 0.3  # NMS IoU 임계값 설정
+# 결과가 없는 경우 대비
+if not hasattr(result, 'pred_instances') or result.pred_instances is None:
+    print("No predictions detected.")
+    selected_bboxes = torch.empty((0, 4))
+    selected_scores = torch.empty(0)
+    selected_labels = torch.empty(0)
+else:
+    # 바운딩 박스, 점수, 라벨 추출
+    bboxes = result.pred_instances.bboxes.cpu() if result.pred_instances.bboxes.numel() > 0 else torch.empty((0, 4))
+    scores = result.pred_instances.scores.cpu() if result.pred_instances.scores.numel() > 0 else torch.empty(0)
+    labels = result.pred_instances.labels.cpu() if result.pred_instances.labels.numel() > 0 else torch.empty(0)
 
-# 바운딩 박스, 점수, 라벨 추출
-bboxes = result.pred_instances.bboxes.cpu()  # 바운딩 박스 좌표
-scores = result.pred_instances.scores.cpu()  # 신뢰도 점수
-labels = result.pred_instances.labels.cpu()  # 클래스 라벨
+    # 바운딩 박스가 비어 있는 경우 대비
+    if bboxes.numel() == 0:
+        print("No bounding boxes detected after filtering.")
+        selected_bboxes = torch.empty((0, 4))
+        selected_scores = torch.empty(0)
+        selected_labels = torch.empty(0)
+    else:
+        # 신뢰도 필터링 적용
+        score_thr = 0.1
+        keep_scores_idx = scores > score_thr
+        bboxes = bboxes[keep_scores_idx]
+        scores = scores[keep_scores_idx]
+        labels = labels[keep_scores_idx]
 
-# 신뢰도 필터링 적용
-keep_scores_idx = scores > score_thr
-bboxes = bboxes[keep_scores_idx]
-scores = scores[keep_scores_idx]
-labels = labels[keep_scores_idx]
+        # NMS 적용
+        iou_threshold = 0.5
+        keep_nms_idx = nms(bboxes, scores, iou_threshold)
+        bboxes = bboxes[keep_nms_idx]
+        scores = scores[keep_nms_idx]
+        labels = labels[keep_nms_idx]
 
-# NMS 적용
-keep_nms_idx = nms(bboxes, scores, iou_threshold)
-bboxes = bboxes[keep_nms_idx]
-scores = scores[keep_nms_idx]
-labels = labels[keep_nms_idx]
-
-# 6. 중복 바운딩 박스에서 작은 바운딩 박스 선택
-# IoU가 일정 이상으로 겹치는 바운딩 박스 중 면적이 작은 것만 남깁니다.
-selected_bboxes = []
-selected_scores = []
-selected_labels = []
-
-for i in range(len(bboxes)):
-    x1, y1, x2, y2 = bboxes[i]
-    area_i = (x2 - x1) * (y2 - y1)
-    is_duplicate = False
-
-    for j in range(len(selected_bboxes)):
-        x1_sel, y1_sel, x2_sel, y2_sel = selected_bboxes[j]
-        area_sel = (x2_sel - x1_sel) * (y2_sel - y1_sel)
-        
-        # IoU 계산
-        inter_x1 = max(x1, x1_sel)
-        inter_y1 = max(y1, y1_sel)
-        inter_x2 = min(x2, x2_sel)
-        inter_y2 = min(y2, y2_sel)
-        inter_area = max(0, inter_x2 - inter_x1) * max(0, inter_y2 - inter_y1)
-        union_area = area_i + area_sel - inter_area
-        iou = inter_area / union_area if union_area > 0 else 0
-
-        # IoU가 높으면 중복으로 간주, 작은 바운딩 박스만 남기기
-        if iou > iou_threshold:
-            is_duplicate = True
-            if area_i < area_sel:
-                selected_bboxes[j] = bboxes[i]
-                selected_scores[j] = scores[i]
-                selected_labels[j] = labels[i]
-            break
-
-    if not is_duplicate:
-        selected_bboxes.append(bboxes[i])
-        selected_scores.append(scores[i])
-        selected_labels.append(labels[i])
-
-# 최종 선택된 바운딩 박스를 numpy 배열로 변환
-selected_bboxes = torch.stack(selected_bboxes).numpy()
-selected_scores = torch.tensor(selected_scores).numpy()
-selected_labels = torch.tensor(selected_labels).numpy()
+        # 최종 결과 저장
+        selected_bboxes = bboxes
+        selected_scores = scores
+        selected_labels = labels
 
 # 7. 필터링된 결과를 시각화
-for bbox, score, label in zip(selected_bboxes, selected_scores, selected_labels):
-    x1, y1, x2, y2 = map(int, bbox)
-    cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)  # 바운딩 박스 그리기
-    cv2.putText(image, f'{model.dataset_meta["classes"][label]}: {score:.2f}', (x1, y1 - 10),
-                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)  # 클래스와 점수 표시
+if selected_bboxes.numel() > 0:  # .size 대신 .numel() 사용
+    for bbox, score, label in zip(selected_bboxes, selected_scores, selected_labels):
+        x1, y1, x2, y2 = map(int, bbox)
+        cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)  # 바운딩 박스 그리기
+        cv2.putText(image, f'{model.dataset_meta["classes"][label]}: {score:.2f}', (x1, y1 - 10),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)  # 클래스와 점수 표시
+else:
+    print("No objects detected to visualize.")
 
 # 8. 결과 이미지 저장
 output_path = 'output/result.jpg'
