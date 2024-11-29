@@ -36,3 +36,17 @@ By entering this code, you can check the 4-point coordinates of the ID card imag
 ```
 python idcard_output.py
 ```
+
+### Details about execution code
+Code: idcard_output.py 
+In fact, it is not ture that only idcard_output.py is needed. In other words, we need other python file code to execute this file.
+
+1. config_file 
+=> mask-rcnn_r50-caffe_fpn_ms-poly-1x_anboimsdataset
+- base: mask-rcnn_r50-caffe_fpn_ms-poly-1x_coco.py
+    base: mask-rcnn_r50_fpn_1x_coco.py
+        base: mask-rcnn_r50_fpn.py  coco_instance.py    schedule_1x.py  default_runtime.py
+        
+
+
+- dataset root
