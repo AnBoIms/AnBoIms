@@ -100,7 +100,7 @@ def clip_grad(model):
 def main():
     
     os.environ['CUDA_VISIBLE_DEVICES'] = str(cfg.gpu)
-    os.environ['CUDA_VISIBLE_DEVICES'] = str(cfg.cpu)
+    # os.environ['CUDA_VISIBLE_DEVICES'] = str(cfg.cpu)
     # device = torch.device(cfg.cpu)
     train_name = get_train_name()
     
