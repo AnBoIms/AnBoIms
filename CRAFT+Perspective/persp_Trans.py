@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+from file_utils import read_coordinates_from_txt
 
 def distance(pt1, pt2):
     return np.linalg.norm(np.array(pt1) - np.array(pt2))
@@ -21,14 +22,16 @@ def crop_idcard(image):
 
     if img is None:
         raise ValueError("Image not found or invalid. Please check the input.")
-
+    txtfile = "./coorTxt/convex_coords.txt"
+    coords = read_coordinates_from_txt(txtfile)
     # 원본 좌표 정의
-    pts1 = np.float32([
-        [623.1742818182743, 548.0548779984684],
-        [443.241943625365, 586.7200662953333],
-        [457.8139341220425, 683.6999663266049],
-        [629.5098579851024, 650.739494352857]
-    ])
+    # pts1 = np.float32([
+    #     [623.1742818182743, 548.0548779984684],
+    #     [443.241943625365, 586.7200662953333],
+    #     [457.8139341220425, 683.6999663266049],
+    #     [629.5098579851024, 650.739494352857]
+    # ])
+    pts1 = coords
 
     # 왼쪽 그룹 (x값이 작은 두 점)과 오른쪽 그룹 (x값이 큰 두 점)을 분리
     pts1 = sorted(pts1, key=lambda p: p[0])  # x좌표 기준으로 정렬
