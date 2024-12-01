@@ -24,6 +24,8 @@ from craft import CRAFT
 from collections import OrderedDict
 from persp_Trans import crop_idcard
 from coordinates import assign_regions, group_by_y_coordinates, parse_coordinates
+from refinenet import RefineNet
+
 
 def copyStateDict(state_dict):
     if list(state_dict.keys())[0].startswith("module"):
@@ -146,7 +148,6 @@ if __name__ == '__main__':
     # LinkRefiner
     refine_net = None
     if args.refine:
-        from refinenet import RefineNet
         refine_net = RefineNet()
         print('Loading weights of refiner from checkpoint (' + args.refiner_model + ')')
         refine_net.load_state_dict(copyStateDict(torch.load(args.refiner_model, map_location='cpu')))
