@@ -14,11 +14,18 @@ def textIpaintingDatasetsCreate(
   background_dir,
   orientation,
   output_path,
-  num_samples,
+  # num_samples,
   image_size,
-  start_num
+  start_num,
+  gpu
   ):
-   # Make dir
+
+  # Use gpu
+  if(gpu != "cpu"):
+    os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
+    os.environ["CUDA_VISIBLE_DEVICES"]=gpu
+  
+  # Make dir
   os.makedirs(output_path, exist_ok=True)
   i_s_path = os.path.join(output_path, 'i_s')
   os.makedirs(i_s_path, exist_ok=True)

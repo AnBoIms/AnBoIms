@@ -9,7 +9,7 @@ pillow  11.0.0
 scikit-image    0.24.0  
 
 ## Usage example
-!python create.py -i xx.txt -o xx.txt -f xx -sf xx.ttf -c black -b xx
+!python create.py -i xx.txt -o xx.txt -f xx -sf xx.ttf -c black -b xx -g 0
 
 ### Options
 '-i', '--input': type=str, help='path to the input text file'  
@@ -20,6 +20,7 @@ scikit-image    0.24.0
 '-b', '--background': type=str, help='path to the background dir'  
 '-or', '--orientation': type=str, default='horizontal', help='choose orientation horizontal or vertical'  
 '-r', '--result': type=str, default='./TID', help='path to the result dir'  
-'-n', '--num': type=int, default=1000, help='number of samples'  
+~~'-n', '--num': type=int, default=1000, help='number of samples'~~
 '-s', '--size': type=tuple, default=(800,400), help='sample image size'  
-'-sn', '--startNum': type=int, default=1, help='start number of samples'  
+'-sn', '--startNum': type=int, default=1, help='start number of samples'
+'-g', '--gpu': type=str, default="cpu", help='if you want to use gpu, write down the number'
