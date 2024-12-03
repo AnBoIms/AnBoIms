@@ -11,9 +11,10 @@ def main():
     parser.add_argument('-b', '--background', type=str, help='path to the background dir')
     parser.add_argument('-or', '--orientation', type=str, default='horizontal', help='choose orientation horizontal or vertical')
     parser.add_argument('-r', '--result', type=str, default='./TID', help='path to the result dir')
-    parser.add_argument('-n', '--num', type=int, default=1000, help='number of samples')
+    # parser.add_argument('-n', '--num', type=int, default=1000, help='number of samples')
     parser.add_argument('-s', '--size', type=tuple, default=(800,400), help='sample image size')
     parser.add_argument('-sn', '--startNum', type=int, default=1, help='start number of samples')
+    parser.add_argument('-g', '--gpu', type=str, default="cpu", help='if you want to use gpu, write down the number')
     args = parser.parse_args()
     textIpaintingDatasetsCreate(
         args.input,
@@ -24,9 +25,10 @@ def main():
         args.background,
         args.orientation,
         args.result,
-        args.num,
+        # args.num,
         args.size,
-        args.startNum)
+        args.startNum,
+        args.gpu)
 
 if __name__ == "__main__":
     main()
