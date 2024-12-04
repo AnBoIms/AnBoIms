@@ -16,11 +16,15 @@ scikit-image    0.24.0
 '-o', '--output': type=str, help='path to the output text file'  
 '-f', '--font': type=str, help='path to the font dir'  
 '-sf', '--standardFont': type=str, help='path to the standard font file'  
-'-c', '--color': type=str, help='path to the color list file' 
-'-b', '--background': type=str, help='path to the background dir'  
-'-or', '--orientation': type=str, default='horizontal', help='choose orientation horizontal or vertical'  
+'-c', '--color': type=str, help='path to the color list file'  
+'-b', '--background': type=str, help='path to the background dir'   
 '-r', '--result': type=str, default='./TID', help='path to the result dir'  
-~~'-n', '--num': type=int, default=1000, help='number of samples'~~
+'-n', '--num': type=int, default=1000, help='number of samples'  
 '-s', '--size': type=tuple, default=(800,400), help='sample image size'  
-'-sn', '--startNum': type=int, default=1, help='start number of samples'
+'-m', '--textMin', type=int, default=20, help='minimum text size'  
+'-M', '--textMax', type=int, default=150, help='maximum text size'  
+'-sn', '--startNum': type=int, default=1, help='start number of samples'  
 '-g', '--gpu': type=str, default="cpu", help='if you want to use gpu, write down the number'
+
+## Number of results
+input_line * output_line * font * color * background * num

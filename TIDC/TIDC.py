@@ -1,6 +1,7 @@
 import os
 from matplotlib.pyplot import imshow
 import numpy as np
+import random
 from PIL import Image, ImageDraw, ImageFont
 from skimage.morphology import skeletonize
 
@@ -12,10 +13,11 @@ def textIpaintingDatasetsCreate(
   standard_font_file,
   color_file,
   background_dir,
-  orientation,
   output_path,
-  # num_samples,
+  num_samples,
   image_size,
+  text_size_min,
+  text_size_max,
   start_num,
   gpu
   ):
@@ -46,18 +48,24 @@ def textIpaintingDatasetsCreate(
   backgrounds = [os.path.join(background_dir, f) for f in os.listdir(background_dir) if f.endswith(("jpeg", ".jpg", ".png"))]
   with open(color_file, 'r', encoding='utf-8') as cf:
     colors = [color_line.strip() for color_line in cf.readlines()]
+  
   n = start_num
-  for font in fonts:
-    for background in backgrounds:
+  for background in backgrounds:
+    t_b_image = creat_t_b(background, image_size)
+    for font_file in fonts:
       for color in colors:
         for matched_input, matched_output in matchText(input_text_file, output_text_file):
-          creat_i_s(matched_input, font, color, background, orientation, i_s_path, image_size, n)
-          creat_i_t(matched_output, standard_font_file, orientation, i_t_path, image_size, n)
-          creat_mask_t_t_sk(matched_output, font, orientation, mask_t_path, t_sk_path, image_size, n)
-          creat_t_t(matched_output, font, color, orientation, t_t_path, image_size, n)
-          creat_t_b(matched_output, font, background, orientation, t_b_path, image_size, n)
-          creat_t_f(matched_output, font, color, background, orientation, t_f_path, image_size, n)
-          n += 1
+          for i in range(num_samples):
+            t_b_image.save(os.path.join(t_b_path, f"{n}_t_b.png")) # Save t_b_image
+            text_size = random.randint(text_size_min, text_size_max) # Text size random
+            font = ImageFont.truetype(font_file, text_size)
+            text_location = textLocation(t_b_image, matched_input, matched_output, font, image_size)
+            creat_i_s(matched_input, font, color, t_b_image, i_s_path, image_size, text_location, n)
+            creat_i_t(matched_output, standard_font_file, i_t_path, image_size, text_size, text_location, n)
+            creat_mask_t_t_sk(matched_output, font, mask_t_path, t_sk_path, image_size, text_location, n)
+            creat_t_t(matched_output, font, color, t_t_path, image_size, text_location, n)
+            creat_t_f(matched_output, font, color, t_b_image, t_f_path, image_size, text_location, n)
+            n += 1
 
 
 def matchText(input_text_file, output_text_file):
@@ -70,117 +78,82 @@ def matchText(input_text_file, output_text_file):
   return matches
 
 
-def creat_i_s(text, font_file, color, background_path, orientation, i_s_path, image_size, n):
-    # Load background and resize
-    background = Image.open(background_path).convert('RGB')
-    background = background.resize(image_size)
-    i_s_image = drawText(text, font_file, color, background, orientation, image_size)
-    # Save image
-    i_s_image.save(os.path.join(i_s_path, f"{n}_i_s.png"))
-
-
-def creat_i_t(text, standard_font_file, orientation, i_t_path, image_size, n):
-    # Create gray background
-    background = Image.new('RGB', image_size, color='gray')
-    i_t_image = drawText(text, standard_font_file, 'black', background, orientation, image_size)
-    # Save image
-    i_t_image.save(os.path.join(i_t_path, f"{n}_i_t.png"))
-
-
-def creat_mask_t_t_sk(text, font_file, orientation, mask_t_path, t_sk_path, image_size, n):
-    # Create black background
-    background = Image.new('RGB', image_size, color='black')
-    mask_t_image = drawText(text, font_file, 'white', background, orientation, image_size)
-    # Save image
-    mask_t_image.save(os.path.join(mask_t_path, f"{n}_mask_t.png"))
-    # Convert cropped_image to grayscale
-    grayscale_image = mask_t_image.convert('L')
-    skeleton_image = skeletonize(np.array(grayscale_image))
-    # Convert the skeleton image back to a PIL Image
-    t_sk_image = Image.fromarray(skeleton_image.astype('uint8') * 255)
-    t_sk_image.save(os.path.join(t_sk_path, f"{n}_t_sk.png"))
-
-
-def creat_t_t(text, font_file, color, orientation, t_t_path, image_size, n):
-    # Create gray background
-    background = Image.new('RGB', image_size, color='gray')
-    t_t_image = drawText(text, font_file, color, background, orientation, image_size)
-    # Save image
-    t_t_image.save(os.path.join(t_t_path, f"{n}_t_t.png"))
-
-
-def creat_t_b(text, font_file, background_path, orientation, t_b_path, image_size, n):
-    # Load background and resize
-    background = Image.open(background_path).convert('RGB')
-    background = background.resize(image_size)
-    t_b_image = drawText(text, font_file, 'black', background, orientation, image_size, True)
-    # Save image
-    t_b_image.save(os.path.join(t_b_path, f"{n}_t_b.png"))
-
-
-def creat_t_f(text, font_file, color, background_path, orientation, t_f_path, image_size, n):
-    # Load background and resize
-    background = Image.open(background_path).convert('RGB')
-    background = background.resize(image_size)
-    t_f_image = drawText(text, font_file, color, background, orientation, image_size)
-    # Save image
-    t_f_image.save(os.path.join(t_f_path, f"{n}_t_f.png"))
-
-
-def drawText(text, font_file, color, background, orientation, image_size, t_b=False):
-  # t_b
-  bg = background.copy()
-  # Font and textsize
-  try:
-      font = ImageFont.truetype(font_file, 50)
-  except:
-      font = ImageFont.load_default()
-
-  # Draw text in image
+def textLocation(background, text1, text2, font, image_size):
   draw = ImageDraw.Draw(background)
-  if orientation == 'horizontal':
-      # Use textbbox to get the bounding box of the text
-      text_bbox = draw.textbbox((0, 0), text, font=font)
-      text_width = text_bbox[2] - text_bbox[0]  # Calculate width
-      text_height = text_bbox[3] - text_bbox[1]  # Calculate height
+  text1_bbox = draw.textbbox((0, 0), text1, font=font)  # Get the bounding box of the text
+  text1_width = text1_bbox[2] - text1_bbox[0]  # Calculate width
+  text1_height = text1_bbox[3] - text1_bbox[1]  # Calculate height
+  text2_bbox = draw.textbbox((0, 0), text2, font=font)
+  text2_width = text2_bbox[2] - text2_bbox[0]
+  text2_height = text2_bbox[3] - text2_bbox[1]
 
-      width, height = image_size[0], image_size[1]
-      text_x = max((width - text_width) / 2, 0)
-      text_y = max((height - text_height) / 2, 0)
-      draw.text((text_x, text_y), text, fill=color, font=font)
-      bbox = draw.textbbox((text_x, text_y), text, font=font)
-  elif orientation == 'vertical':
-      lines = list(text)
-      line_height = font.getbbox("A")[3] - font.getbbox("A")[1]
-      max_line_width = max([font.getbbox(line)[2] - font.getbbox(line)[0] for line in lines])
-      total_text_height = len(lines) * line_height
-      if total_text_height > height:
-          height = total_text_height + 20  # Add free space
-          background = background.new('RGB', (width, height), color='black')
-          draw = ImageDraw.Draw(background)
-      text_x = (width - max_line_width) / 2
-      text_y = (height - total_text_height) / 2
-      for i, line in enumerate(lines):
-          draw.text((text_x, text_y + i * line_height), line, fill=color, font=font)
-      # Crop to fit the widest text width
-      bbox = (text_x, text_y, text_x + max_line_width, text_y + total_text_height)
+  text_width = text1_width if (text1_width > text2_width) else text2_width
+  text_height = text1_height if (text1_height > text2_height) else text2_height
+  x = random.randint(0, image_size[0] - text_width)
+  y = random.randint(0, image_size[1] - text_height)
+  return (x, y)
 
-  if t_b: # if t_b
-    # Cut only the area containing text (cut to fit text both horizontally and vertically)
-    if bbox:
-        left, upper, right, lower = bbox
-        # Additional margin adjustments to cut the horizontal length shorter
-        padding = 10
-        cropped_image = bg.crop((max(left - padding, 0), max(upper - padding, 0), min(right + padding, width), min(lower + padding, height)))
-    else:
-        cropped_image = bg
-  else: # not t_b
-    # Cut only the area containing text (cut to fit text both horizontally and vertically)
-    if bbox:
-        left, upper, right, lower = bbox
-        # Additional margin adjustments to cut the horizontal length shorter
-        padding = 10
-        cropped_image = background.crop((max(left - padding, 0), max(upper - padding, 0), min(right + padding, width), min(lower + padding, height)))
-    else:
-        cropped_image = background
-  return cropped_image
+
+def creat_t_b(background, image_size):
+  # Load background
+  background = Image.open(background).convert('RGB')
+  image_width, image_height = background.size
+
+  # Image crop
+  left = (image_width - image_size[0]) // 2
+  top = (image_height - image_size[1]) // 2
+  right = left + image_size[0]
+  bottom = top + image_size[1]
+  t_b_image = background.crop((left, top, right, bottom))
+  return t_b_image
+
+
+def creat_i_s(text, font, color, background, i_s_path, image_size, text_location, n):
+  i_s_image = background.copy()
+  draw = ImageDraw.Draw(i_s_image)
+  draw.text(text_location, text, fill=color, font=font) # Add text
+  # Save image
+  i_s_image.save(os.path.join(i_s_path, f"{n}_i_s.png"))
+
+
+def creat_i_t(text, standard_font_file, i_t_path, image_size, text_size, text_location, n):
+  # Create gray background
+  font = ImageFont.truetype(standard_font_file, text_size)
+  i_t_image = Image.new('RGB', image_size, color='gray')
+  draw = ImageDraw.Draw(i_t_image)
+  draw.text(text_location, text, fill='black', font=font) # Add text
+  # Save image
+  i_t_image.save(os.path.join(i_t_path, f"{n}_i_t.png"))
+
+
+def creat_mask_t_t_sk(text, font, mask_t_path, t_sk_path, image_size, text_location, n):
+  # Create black background
+  mask_t_image = Image.new('RGB', image_size, color='black')
+  draw = ImageDraw.Draw(mask_t_image)
+  draw.text(text_location, text, fill='white', font=font) # Add text
+  # Save image
+  mask_t_image.save(os.path.join(mask_t_path, f"{n}_mask_t.png"))
+  # Convert cropped_image to grayscale
+  grayscale_image = mask_t_image.convert('L')
+  skeleton_image = skeletonize(np.array(grayscale_image))
+  # Convert the skeleton image back to a PIL Image
+  t_sk_image = Image.fromarray(skeleton_image.astype('uint8') * 255)
+  t_sk_image.save(os.path.join(t_sk_path, f"{n}_t_sk.png"))
+
+
+def creat_t_t(text, font, color, t_t_path, image_size, text_location, n):
+  # Create gray background
+  t_t_image = Image.new('RGB', image_size, color='gray')
+  draw = ImageDraw.Draw(t_t_image)
+  draw.text(text_location, text, fill=color, font=font) # Add text
+  # Save image
+  t_t_image.save(os.path.join(t_t_path, f"{n}_t_t.png"))
+
+
+
+def creat_t_f(text, font, color, background, t_f_path, image_size, text_location, n):
+  t_f_image = background.copy()
+  draw = ImageDraw.Draw(t_f_image)
+  draw.text(text_location, text, fill=color, font=font) # Add text
+  # Save image
+  t_f_image.save(os.path.join(t_f_path, f"{n}_t_f.png"))
