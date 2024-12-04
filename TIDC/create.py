@@ -11,7 +11,8 @@ def main():
     parser.add_argument('-b', '--background', type=str, help='path to the background dir')
     parser.add_argument('-r', '--result', type=str, default='./TID', help='path to the result dir')
     parser.add_argument('-n', '--num', type=int, default=10, help='number of samples')
-    parser.add_argument('-s', '--size', type=tuple, default=(800,400), help='sample image size')
+    parser.add_argument('-w', '--width', type=int, default=800, help='sample image width')
+    parser.add_argument('-h', '--height', type=int, default=600, help='sample image height')
     parser.add_argument('-m', '--textMin', type=int, default=20, help='minimum text size')
     parser.add_argument('-M', '--textMax', type=int, default=150, help='maximum text size')
     parser.add_argument('-sn', '--startNum', type=int, default=1, help='start number of samples')
@@ -26,7 +27,8 @@ def main():
         args.background,
         args.result,
         args.num,
-        args.size,
+        args.width,
+        args.height,
         args.textMin,
         args.textMax,
         args.startNum,
