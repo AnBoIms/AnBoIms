@@ -11,7 +11,7 @@
 (추가 설멍이 필요하긴 할듯)
 
 ## 저희 프로젝트의 구조는 다음과 같습니다.
-![Image](https://github.com/AnBoIms/AnBoIms/raw/main/base_flow_chart_1205.jpg)
+![Image](https://github.com/AnBoIms/AnBoIms/raw/main/flow_chart_imgs/base_flow_chart_1205.jpg)
 
 ## 프로젝트 현황
 
