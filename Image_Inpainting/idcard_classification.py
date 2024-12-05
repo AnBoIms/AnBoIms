@@ -44,15 +44,15 @@ def merge_close_boxes(boxes, max_y_diff=10):
     result = []
     for group in merged_text:
         all_text = " ".join([t[1] for t in group])
-        x_min = min([g[0][0][0] for g in group]),  # 좌상단 X
-        y_min = min([g[0][0][1] for g in group]),  # 좌상단 Y
-        x_max = max([g[0][2][0] for g in group]),  # 우하단 X
-        y_max = max([g[0][2][1] for g in group])   # 우하단 Y
+        x_min = min([g[0][0][0] for g in group]),  
+        y_min = min([g[0][0][1] for g in group]),  
+        x_max = max([g[0][2][0] for g in group]),  
+        y_max = max([g[0][2][1] for g in group])   
         rect_coords = [
-            [x_min, y_min],  # 좌상단
-            [x_max, y_min],  # 우상단
-            [x_max, y_max],  # 우하단
-            [x_min, y_max]   # 좌하단
+            [x_min, y_min],  
+            [x_max, y_min],  
+            [x_max, y_max], 
+            [x_min, y_max]   
         ]
         result.append((rect_coords, all_text))
     return result
@@ -154,6 +154,18 @@ def save_results_as_json(results, output_path):
         if isinstance(coord, tuple):  # 튜플인 경우 내부 값 추출
             return int(coord[0])
         return int(coord)
+    
+    def adjust_coordinates(coords):
+        """
+        좌표를 5씩 조정
+        """
+        adjusted_coords = [
+            [coords[0][0] - 5, coords[0][1] - 5], 
+            [coords[1][0] + 5, coords[1][1] - 5],  
+            [coords[2][0] + 5, coords[2][1] + 5],  
+            [coords[3][0] - 5, coords[3][1] + 5]  
+        ]
+        return adjusted_coords
 
     annotations = []
 
@@ -166,9 +178,11 @@ def save_results_as_json(results, output_path):
 
     # 주민등록번호 데이터 처리
     for box in results["resident_id"]:
+        original_coords = [[extract_coordinate(coord[0]), extract_coordinate(coord[1])] for coord in box[0]]
+        adjusted_coords = adjust_coordinates(original_coords)
         annotations.append({
             "type": "resident_id",
-            "bounding_box": [[extract_coordinate(coord[0]), extract_coordinate(coord[1])] for coord in box[0]]
+            "bounding_box": adjusted_coords
         })
 
     # 주소 데이터 처리 (전체 주소 바운딩 박스를 하나로 합치기)
