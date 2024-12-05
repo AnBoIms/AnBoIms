@@ -23,7 +23,7 @@ def create_text_image(text, font_path, font_size, image_size, output_path):
     print(f"이미지 생성 완료: {output_path}")
 
 # 폰트 경로
-font_path = "/usr/share/fonts/truetype/nanum/NanumGothicBold.ttf"
+font_path = "/usr/share/fonts/truetype/nanum/NanumMyeongjoBold.ttf"
 
 
 # 저장 디렉터리 경로
