@@ -29,4 +29,4 @@ scikit-image    0.24.0
 '-g', '--gpu': type=str, default="cpu", help='if you want to use gpu, write down the number'
 
 ## Number of results
-input_line * output_line * font * color * background * num * 7(files)
+input_line * output_line * font * color * background * 7(files)

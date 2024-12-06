@@ -93,10 +93,10 @@ def textSet(text, font_file, text_size, img_width, img_height):
   # Use getbbox instead of getsize to get the text dimensions
   text_width, text_height = draw.textbbox((0, 0), text, font=font)[2:] 
 
-  while text_width > img_width * 1.0 and text_height > img_height * 1.0:  # 여백 0%
+  while text_width > img_width * 0.98 or text_height > img_height * 0.98:  # Blank 2%
     text_size -= 1
-  font = ImageFont.truetype(font_file, text_size)
-  text_width, text_height = draw.textbbox((0, 0), text, font=font)[2:]
+    font = ImageFont.truetype(font_file, text_size)
+    text_width, text_height = draw.textbbox((0, 0), text, font=font)[2:]
   # Calculate text position (center alignment)
   text_location = ((img_width - text_width) // 2, (img_height - text_height) // 2)
 
